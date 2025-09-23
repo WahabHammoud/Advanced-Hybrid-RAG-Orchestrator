@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    ports:
+      - "8501:8501"  # Streamlit default port
+    environment:
+      - OPENAI_API_KEY=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  # Reference to your API key in the .env file
+      - GROQ_API_KEY=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  # Reference to your API key in the .env file
+    volumes:
+      - .:/app  # Optional: mount the current directory for live updates
