@@ -53,7 +53,7 @@
 ## 🎬 Demo
 
 ![Demo GIF](demo.gif)
-
+![Demo](demo.gif)
 **Scénario**: Analyse d'un PDF technique avec figures  
 **Question**: *"Compare les performances des modèles A et B selon le graphique page 15"*
 
@@ -63,30 +63,28 @@
 ## 🏗️ Architecture Hybride
  
 ### 🔄 Pipeline Complet
- 
-## 🏗️ Architecture
 
 ```mermaid
 flowchart TB
-    subgraph Input["📥 Input Layer"]
-        PDF[PDF Documents]
-        IMG[Images]
+    subgraph Input["Input Layer"]
+        PDF["PDF Documents"]
+        IMG["Images"]
     end
     
-    subgraph Process["🔧 Processing"]
-        PYM[PyMuPDF Extractor]
-        SPLIT[Text Splitter]
-        CLIP[CLIP Encoder]
+    subgraph Process["Processing"]
+        PYM["PyMuPDF Extractor"]
+        SPLIT["Text Splitter"]
+        CLIP["CLIP Encoder"]
     end
     
-    subgraph Store["🗄️ Vector Store"]
-        FAISS[(FAISS Index)]
+    subgraph Store["Vector Store"]
+        FAISS["FAISS Index"]
     end
     
-    subgraph Agent["🤖 RAG Agent"]
-        RET[Retriever]
-        RERANK[Reranker]
-        GEN[Generator]
+    subgraph Agent["RAG Agent"]
+        RET["Retriever"]
+        RERANK["Reranker"]
+        GEN["Generator"]
     end
     
     PDF --> PYM
