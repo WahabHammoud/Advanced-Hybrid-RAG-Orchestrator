@@ -52,7 +52,7 @@
  
 ## 🎬 Demo
 
-![Demo GIF](assets/demo.gif)
+![Demo GIF](demo.gif)
 
 **Scénario**: Analyse d'un PDF technique avec figures  
 **Question**: *"Compare les performances des modèles A et B selon le graphique page 15"*
