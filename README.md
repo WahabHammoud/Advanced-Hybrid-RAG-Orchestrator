@@ -50,9 +50,12 @@
 - 🧠 **Raisonner en plusieurs étapes** avec planification adaptative
 - 🛡️ **Garantir la fiabilité** via des mécanismes anti-hallucination
  
-### 🎬 Demo
- 
-┌─────────────────────────────────────────────────────────────────┐ │ 📄 Input: PDF avec texte et schémas techniques │ │ │ │ ❓ Question: "Quelle est la différence entre les figures │ │ 3 et 4 dans le document, et comment cela affecte │ │ le processus de manufacturing?" │ │ │ │ 🔍 Retrieval: │ │ • Chunk texte: "Le processus A implique..." [Page 12] │ │ • Image similaire: Figure 3 [similarité: 0.87] │ │ • Chunk texte: "En comparaison, le processus B..." │ │ │ │ 💡 Réponse: │ │ "D'après l'analyse du document (p.12 et figures 3-4), │ │ la principale différence réside dans..." │ │ │ │ 📚 Sources: Page 12, Figure 3, Figure 4 │ └─────────────────────────────────────────────────────────────────┘
+## 🎬 Demo
+
+![Demo GIF](assets/demo.gif)
+
+**Scénario**: Analyse d'un PDF technique avec figures  
+**Question**: *"Compare les performances des modèles A et B selon le graphique page 15"*
 
  
 ---
