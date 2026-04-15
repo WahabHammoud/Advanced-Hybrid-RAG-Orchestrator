@@ -52,7 +52,6 @@
  
 ## 🎬 Demo
 
-![Demo GIF](demo.gif)
 ![Demo](demo.gif)
 **Scénario**: Analyse d'un PDF technique avec figures  
 **Question**: *"Compare les performances des modèles A et B selon le graphique page 15"*
@@ -64,38 +63,15 @@
  
 ### 🔄 Pipeline Complet
 
-```mermaid
-flowchart TB
-    subgraph Input["Input Layer"]
-        PDF["PDF Documents"]
-        IMG["Images"]
-    end
-    
-    subgraph Process["Processing"]
-        PYM["PyMuPDF Extractor"]
-        SPLIT["Text Splitter"]
-        CLIP["CLIP Encoder"]
-    end
-    
-    subgraph Store["Vector Store"]
-        FAISS["FAISS Index"]
-    end
-    
-    subgraph Agent["RAG Agent"]
-        RET["Retriever"]
-        RERANK["Reranker"]
-        GEN["Generator"]
-    end
-    
-    PDF --> PYM
-    PYM --> SPLIT
-    PYM --> IMG
-    IMG --> CLIP
-    SPLIT --> FAISS
-    CLIP --> FAISS
-    FAISS --> RET
-    RET --> RERANK
-    RERANK --> GEN
+| Couche | Composant | Technologie | Rôle |
+|--------|-----------|-------------|------|
+| **Input** | PDF Parser | PyMuPDF | Extraction texte + images |
+| **Processing** | Text Chunker | LangChain | Segmentation 1000 tokens |
+| | Image Encoder | CLIP ViT-B/32 | Embeddings 512-d |
+| | Text Encoder | SentenceT | Embeddings 384-d |
+| **Storage** | Vector DB | FAISS | Index + recherche rapide |
+| **Agent** | Retriever | Similarité Cosinus | Top-k matching |
+| | Generator | LLM | Réponse avec citations |
  
 ### 🧩 Composants Clés
  
