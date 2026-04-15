@@ -61,8 +61,40 @@
  
 ### 🔄 Pipeline Complet
  
-┌──────────────────────────────────────────────────────────────────────────────┐ │ INPUT LAYER │ │ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │ │ │ PDF Files │ │ Images │ │ Text Raw │ │ │ │ (Complex) │ │ (Charts) │ │ (CSV/JSON) │ │ │ └──────┬───────┘ └──────┬───────┘ └──────┬───────┘ │ └─────────┼──────────────────┼──────────────────┼──────────────────────────────────┘ │ │ │ ▼ ▼ ▼ ┌──────────────────────────────────────────────────────────────────────────────┐ │ DOCUMENT PROCESSING ENGINE │ │ │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │ │ PyMuPDF Extractor │ │ │ │ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐ │ │ │ │ │ Text Stream │ │ Images │ │ Metadata │ │ │ │ │ │ (Content) │ │ (Figures) │ │ (Page/Pos) │ │ │ │ │ └──────┬───────┘ └──────┬───────┘ └──────────────┘ │ │ │ └─────────┼──────────────────┼──────────────────────────────────────────────┘ │ │ │ │ │ │ ▼ ▼ │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │ │ MULTI-MODAL CHUNKING & EMBEDDINGS │ │ │ │ │ │ │ │ TEXT BRANCH │ IMAGE BRANCH │ │ │ │ ──────────── │ ──────────── │ │ │ │ ┌────────────────────┐ │ ┌────────────────────┐ │ │ │ │ │ RecursiveCharacter │ │ │ Image Extract │ │ │ │ │ │ TextSplitter │ │ │ & Preprocess │ │ │ │ │ │ (LangChain) │ │ │ (Resize/Norm) │ │ │ │ │ └──────────┬─────────┘ │ └──────────┬─────────┘ │ │ │ │ │ │ │ │ │ │ │ ┌──────────▼─────────┐ │ ┌──────────▼─────────┐ │ │ │ │ │ SentenceTransformer│ │ │ CLIP Model │ │ │ │ │ │ (all-MiniLM-v6) │ │ │ (ViT-B/32) │ │ │ │ │ │ Text Embeddings │ │ │ Image Embeddings │ │ │ │ │ │ [384 dim] │ │ │ [512 dim] │ │ │ │ │ └──────────┬─────────┘ │ └──────────┬─────────┘ │ │ │ └──────────────┼───────────────────┼────────────────┼───────────────────────┘ │ │ │ │ │ │ └─────────────────┼───────────────────┼────────────────┼─────────────────────────┘ │ │ │ ▼ ▼ ▼ ┌──────────────────────────────────────────────────────────────────────────────┐ │ UNIFIED VECTOR STORE │ │ │ │ ┌───────────────────────────────────────────────────────────────────┐ │ │ │ FAISS INDEX │ │ │ │ ┌─────────────────┐ ┌─────────────────┐ ┌─────────────────┐ │ │ │ │ │ Text Embeddings │ │ Image Embeddings│ │ Hybrid Search │ │ │ │ │ │ (IndexFlat) │ │ (IndexFlat) │ │ (Combined) │ │ │ │ │ │ 384-d vectors │ │ 512-d vectors │ │ Similarity + │ │ │ │ │ │ Cosine Metric │ │ Cosine Metric │ │ Metadata filter │ │ │ │ │ └─────────────────┘ └─────────────────┘ └─────────────────┘ │ │ │ └───────────────────────────────────────────────────────────────────┘ │ │ │ │ 🔍 Capabilities: │ │ • Sub-second similarity search (CPU) │ │ • Multi-modal retrieval (text + image queries) │ │ • Metadata filtering (page, section, doc_id) │ │ • Scalable to 100K+ documents │ └──────────────────────────────────────────────────────────────────────────────┘ │ ▼ ┌──────────────────────────────────────────────────────────────────────────────┐ │ ORCHESTRATED RAG AGENT │ │ │ │ ┌─────────────────────────────────────────────────────────────────────────┐ │ │ │ 1. QUERY UNDERSTANDING │ │ │ │ • Intent classification (factual/analytical/comparative) │ │ │ │ • Multi-modal detection (text vs image query) │ │ │ └──────────────────────────────┬──────────────────────────────────────────┘ │ │ │ │ │ ┌──────────────────────────────▼──────────────────────────────────────────┐ │ │ │ 2. RETRIEVAL STRATEGY PLANNER │ │ │ │ • Route to text index, image index, or both │ │ │ │ • Dynamic top-k selection (adaptive recall) │ │ │ │ • Relevance threshold tuning │ │ │ └──────────────────────────────┬──────────────────────────────────────────┘ │ │ │ │ │ ┌──────────────────────────────▼──────────────────────────────────────────┐ │ │ │ 3. CONTEXT ASSEMBLER │ │ │ │ • Reranking by relevance score │ │ │ │ • Deduplication (semantic + exact) │ │ │ │ • Context window optimization (token budget) │ │ │ └──────────────────────────────┬──────────────────────────────────────────┘ │ │ │ │ │ ┌──────────────────────────────▼──────────────────────────────────────────┐ │ │ │ 4. GENERATION WITH ANTI-HALLUCINATION │ │ │ │ • Prompt engineering with strict constraints │ │ │ │ • Source citation enforcement (every claim cited) │ │ │ │ • Confidence scoring per statement │ │ │ │ • "I don't know" fallback for low confidence │ │ │ └──────────────────────────────┬──────────────────────────────────────────┘ │ │ │ │ └─────────────────────────────────┼────────────────────────────────────────────┘ │ ▼ ┌──────────────────────────────────────────────────────────────────────────────┐ │ OUTPUT │ │ │ │ 💡 Generated Answer (with inline citations) │ │ 📚 Source Attribution (document + page + chunk) │ │ 🎯 Confidence Score (0-100%) │ │ 🔍 Retrieved Context (viewable for transparency) │ └──────────────────────────────────────────────────────────────────────────────┘
+## 🏗️ Architecture
 
+```mermaid
+flowchart TB
+    subgraph Input["📥 Input Layer"]
+        PDF[PDF Documents]
+        IMG[Images]
+    end
+    
+    subgraph Process["🔧 Processing"]
+        PYM[PyMuPDF Extractor]
+        SPLIT[Text Splitter]
+        CLIP[CLIP Encoder]
+    end
+    
+    subgraph Store["🗄️ Vector Store"]
+        FAISS[(FAISS Index)]
+    end
+    
+    subgraph Agent["🤖 RAG Agent"]
+        RET[Retriever]
+        RERANK[Reranker]
+        GEN[Generator]
+    end
+    
+    PDF --> PYM
+    PYM --> SPLIT
+    PYM --> IMG
+    IMG --> CLIP
+    SPLIT --> FAISS
+    CLIP --> FAISS
+    FAISS --> RET
+    RET --> RERANK
+    RERANK --> GEN
  
 ### 🧩 Composants Clés
  
